@@ -24,7 +24,7 @@ Enemy.prototype.update = function (dt) {
     if (this.x < this.move * 5) {
         this.x += this.speed * dt
     } else {
-        this.x = -50;
+        this.x = -101;
     }
     // else  reset coordinates to starting positions
 };
@@ -56,7 +56,7 @@ Enemy.prototype.render = function () {
 //Render
 //Draw hero in new position according to User input
 //Reset coordinates
-class Hero {
+class Hero { //The player Class
     constructor() {
         this.sprite = "images/char-boy.png";
         this.yInterval = 101; // the interval for y and x was gotten from the canvas measure in render function (engine.js)
@@ -67,12 +67,26 @@ class Hero {
         this.y = this.yStart;
     }
 
-    render() {
+    render() { // the hero instance;
         ctx.drawImage(Resources.get(this.sprite), this.y, this.x); //Render function taken from enemy starter code
     }
+    update() { //Updates player Position
+        for (const bug of allEnemies) {
+            if (this.x === bug.y && (bug.x * 1.5 > this.y && bug.x < this.y + 9)) {
+                this.gameReset()
+            }
+        }
+        if (this.x === -28) {
+            alert("You have won the game");
+            this.gameReset();
+        }
+    }
 
-
-    handleInput(input) {
+    gameReset() { //Resets the game in case of a collision or a win
+        this.y = this.yStart;
+        this.x = this.xStart;
+    }
+    handleInput(input) { //This handles the input;
         if (input === "up" && this.x > 0) {
             this.x -= this.xInterval;
         } else if (input === "left" && this.y > 0) {
